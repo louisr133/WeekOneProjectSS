@@ -103,7 +103,6 @@ public class Publisher {
 			wout = new FileWriter(file, false);
 			map.forEach((k, v) -> {
 				try {
-					System.out.print(k + "," + v + ",");
 					wout.write(k.toString() + "," + v + ",");
 
 				} catch (IOException e) {
@@ -148,6 +147,47 @@ public class Publisher {
 		}
 		System.out.println();
 	}
+	
+	public static void update(String pubId) {
+		Scanner scanA = null;
+
+		try {
+			scanA = new Scanner(file);
+		} catch (FileNotFoundException e1) {
+			System.out.println("Exception occured: " + e1);
+		}
+
+		// scan.next() separated by ,
+		scanA.useDelimiter(",");
+
+		try {
+			while (scanA.hasNext()) {
+				map.put(Integer.parseInt(scanA.next()), scanA.next());
+			}
+		} catch (Exception e) {
+			System.out.println("Exception: " + e);
+		}
+		
+		Scanner scan = new Scanner(System.in);
+		boolean isPassable = true;
+
+		while (isPassable) {
+			try {
+				if (!"exit".equalsIgnoreCase(pubId)) {
+					System.out.println("What would you like to change the Publisher to? \"n/a\" to skip");
+					String update = scan.nextLine();
+					map.replace(Integer.parseInt(pubId), update);
+					Publisher.rewrite();
+					isPassable = false;
+				} else {
+					isPassable = false;
+				}
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
+		System.out.println();
+	}
 
 	// delete author
 	public static void delete() {
@@ -173,6 +213,34 @@ public class Publisher {
 		}
 		System.out.println();
 
+	}
+	
+
+	public static void delete(String authId) {
+		
+		Scanner scan = null;
+		try {
+			scan  = new Scanner(file);
+		} catch (FileNotFoundException e1) {
+			System.out.println("Exception occured: " + e1);
+		}
+
+		// scan.next() separated by ,
+		scan.useDelimiter(",");
+
+		try {
+			while (scan.hasNext()) {
+				map.put(Integer.parseInt(scan.next()), scan.next());
+			}
+		} catch (Exception e) {
+			System.out.println("Exception: " + e);
+		}
+
+		for (Integer key : map.keySet()) {
+			maxId = findLargestVal(maxId, key);
+		}
+		map.remove(Integer.parseInt(authId));
+		Publisher.rewrite();
 	}
 
 	// find bigger value

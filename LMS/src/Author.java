@@ -24,7 +24,6 @@ public class Author {
 				map.put((Integer) Integer.parseInt(scan.next()), scan.next());
 			}
 		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -32,7 +31,7 @@ public class Author {
 
 	// Add author
 	public static void create() {
-		
+
 		System.out.println("What is the name of the new author? (write \"exit\" to exit)");
 		Scanner scan = new Scanner(System.in);
 		String name = scan.nextLine();
@@ -72,7 +71,8 @@ public class Author {
 
 		for (Integer key : map.keySet()) {
 			maxId = findLargestVal(maxId, key);
-		};
+		}
+		;
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(file, true));
 			maxId++;
@@ -83,7 +83,7 @@ public class Author {
 		}
 
 		updateHashMap();
-		
+
 		return maxId;
 	}
 
@@ -106,7 +106,6 @@ public class Author {
 			wout = new FileWriter(file, false);
 			map.forEach((k, v) -> {
 				try {
-					System.out.print(k + "," + v + ",");
 					wout.write(k.toString() + "," + v + ",");
 
 				} catch (IOException e) {
@@ -152,6 +151,46 @@ public class Author {
 		System.out.println();
 	}
 
+	public static void update(String authId) {
+		Scanner scanA = null;
+
+		try {
+			scanA = new Scanner(file);
+		} catch (FileNotFoundException e1) {
+			System.out.println("Exception occured: " + e1);
+		}
+
+		// scan.next() separated by ,
+		scanA.useDelimiter(",");
+
+		try {
+			while (scanA.hasNext()) {
+				map.put(Integer.parseInt(scanA.next()), scanA.next());
+			}
+		} catch (Exception e) {
+			System.out.println("Exception: " + e);
+		}
+		
+		Scanner scan = new Scanner(System.in);
+		boolean isPassable = true;
+
+		while (isPassable) {
+			try {
+				if (!"exit".equalsIgnoreCase(authId)) {
+					System.out.println("What would you like to change Author to?");
+					String update = scan.nextLine();
+					map.replace(Integer.parseInt(authId), update);
+					Author.rewrite();
+					isPassable = false;
+				} else {
+					isPassable = false;
+				}
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
+	}
+
 	// delete author
 	public static void delete() {
 		System.out.println("Which author would you like to delete? \"exit\" to exit");
@@ -176,6 +215,29 @@ public class Author {
 		}
 		System.out.println();
 
+	}
+
+	public static void delete(String authId) {
+		Scanner scan = null;
+		try {
+			scan = new Scanner(file);
+		} catch (FileNotFoundException e1) {
+			System.out.println("Exception occured: " + e1);
+		}
+
+		// scan.next() separated by ,
+		scan.useDelimiter(",");
+
+		try {
+			while (scan.hasNext()) {
+				map.put(Integer.parseInt(scan.next()), scan.next());
+			}
+		} catch (Exception e) {
+			System.out.println("Exception: " + e);
+		}
+
+		map.remove(Integer.parseInt(authId));
+		Author.rewrite();
 	}
 
 	// find bigger value
