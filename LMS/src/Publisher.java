@@ -49,6 +49,29 @@ public class Publisher {
 	}
 
 	public static int create(String name) {
+		Scanner scanA = new Scanner(System.in);
+		Scanner scan = null;
+
+		try {
+			scan = new Scanner(file);
+		} catch (FileNotFoundException e1) {
+			System.out.println("Exception occured: " + e1);
+		}
+
+		// scan.next() separated by ,
+		scan.useDelimiter(",");
+
+		try {
+			while (scan.hasNext()) {
+				map.put(Integer.parseInt(scan.next()), scan.next());
+			}
+		} catch (Exception e) {
+			System.out.println("Exception: " + e);
+		}
+
+		for (Integer key : map.keySet()) {
+			maxId = findLargestVal(maxId, key);
+		}
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(file, true));
 			maxId++;

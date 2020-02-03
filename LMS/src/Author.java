@@ -32,6 +32,7 @@ public class Author {
 
 	// Add author
 	public static void create() {
+		
 		System.out.println("What is the name of the new author? (write \"exit\" to exit)");
 		Scanner scan = new Scanner(System.in);
 		String name = scan.nextLine();
@@ -49,7 +50,29 @@ public class Author {
 	}
 
 	public static int create(String name) {
-		Scanner scan = new Scanner(System.in);
+		Scanner scanA = new Scanner(System.in);
+		Scanner scan = null;
+
+		try {
+			scan = new Scanner(file);
+		} catch (FileNotFoundException e1) {
+			System.out.println("Exception occured: " + e1);
+		}
+
+		// scan.next() separated by ,
+		scan.useDelimiter(",");
+
+		try {
+			while (scan.hasNext()) {
+				map.put(Integer.parseInt(scan.next()), scan.next());
+			}
+		} catch (Exception e) {
+			System.out.println("Exception: " + e);
+		}
+
+		for (Integer key : map.keySet()) {
+			maxId = findLargestVal(maxId, key);
+		};
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(file, true));
 			maxId++;
@@ -180,7 +203,7 @@ public class Author {
 
 		try {
 			while (scan.hasNext()) {
-				map.put((Integer) Integer.parseInt(scan.next()), scan.next());
+				map.put(Integer.parseInt(scan.next()), scan.next());
 			}
 		} catch (Exception e) {
 			System.out.println("Exception: " + e);
